@@ -10,14 +10,12 @@ async function cadastrarCliente(cliente){
     return await $.post( "http://localhost:4000/cadastrarCliente", cliente, function(data) {}, "json")
 }
 
-function editarCliente(cliente){
-    $.ajax({
+async function editarCliente(cliente){
+    return await $.ajax({
         url: 'http://localhost:4000/editarCliente',
         type: 'PUT',
         data: cliente,
-        success: function(data) {
-            console.log(data)
-        }
+        success: function(data) {}
     });
 }
 

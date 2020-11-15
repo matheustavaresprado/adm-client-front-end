@@ -20,10 +20,15 @@ function preencheTbody(dados){
 }
 
 function gerarHtml(item){
+    var badge = ''
+    if(item.renda_familiar <= 980) badge = 'badge-vermelho'
+    else if(item.renda_familiar <= 2500) badge = 'badge-amarelo'
+    else if(item.renda_familiar > 2500) badge = 'badge-verde'
+
     return ""
     + "<tr>"
     + "<td>" + item.nome + "</td>"
-    + "<td> R$ " + item.renda_familiar.replace('.', ',') + "</td>"
+    + '<td> <span class="' + badge + '">R$ ' + item.renda_familiar.split('.')[0] + "</span></td>"
     + "<td>"
     +   '<button type="button" class="btn btn-sm btn-primary btn-outline btn-1b" onclick="abrirModalCliente(' + item.id + ')" data-tooltip="tooltip" title="Editar" data-toggle="modal" data-target="#manterCliente" data-whatever="Editar cliente"><i class="fas fa-pencil-alt"></i></button>'
     +   '<button type="button" class="btn btn-sm btn-danger btn-outline btn-1b ml-1" onclick="excluir(' + item.id + ')" data-tooltip="tooltip" title="Excluir"><i class="fas fa-trash-alt"></i></i></button>'
@@ -34,18 +39,28 @@ function gerarHtml(item){
 function salvar(){
     if($('#id').val()){
         editarCliente($('#formCliente').serialize()).then((dados) => {
-            if(dados.code == 'erro')alert(dados.message)
+            console.log('dd',dados)
+            alert(dados.message)
+            if(dados.code == 'ok')
+                $('#manterCliente').modal('toggle');
+            
+            carregarClientes()
         })
     }
     else{
         cadastrarCliente($('#formCliente').serialize()).then((dados) => {
-            if(dados.code == 'erro')alert(dados.message)
+            alert(dados.message)
+            if(dados.code == 'ok')
+                $('#manterCliente').modal('toggle');
+                
+            carregarClientes()
         })
     }
 }
 
 function excluir(id){
     excluirCliente(id)
+    carregarClientes()
 }
 
 function abrirModalCliente(id){

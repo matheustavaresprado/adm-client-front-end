@@ -12,8 +12,8 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           <div class="collapse navbar-collapse">
             <div class="navbar-nav">
-              <a class="nav-link active" onclick="mostrarDashboard()">Início</span></a>
-              <a class="nav-link" onclick="mostrarControleClientes()">Controle de clientes</span></a>
+              <a class="nav-link active" onclick="mostrarDashboard()"><i class="fas fa-home"></i> Início</span></a>
+              <a class="nav-link" onclick="mostrarControleClientes()"><i class="fas fa-users"></i> Controle de clientes</span></a>
             </div>
           </div>
         </nav>
@@ -27,27 +27,35 @@
 
       <div id="page-wrapper">
         <div class="container-fluid">
-          <div class="row bg-title">
-            <div class="col-md-6">
-                <h4 class="page-title">Controle de clientes</h4>
+          <div class="row bg-title mt-2 mb-2 ml-5 mr-5">
+            <div class="col-md-12 p-0">
+              <h4 class="page-title">CONTROLE DE CLIENTES</h4>
             </div>
           </div>
 
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#manterCliente" data-whatever="Novo cliente">Novo</button>
-
-          <input class="form-control" id="buscarCliente" type="text" placeholder="Buscar por nome...">
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th scope="col">Nome</th>
-                  <th scope="col">Renda Familiar</th>
-                  <th scope="col">Ações</th>
-                </tr>
-              </thead>
-              <tbody id="clientes">
-              </tbody>
-            </table>
+          <div class="row ml-5 mr-5 mb-2">
+            <div class="col-md-9 p-0">
+              <input class="form-control" id="buscarCliente" type="text" placeholder="Buscar por nome..." maxlength="150">
+            </div>
+            <div class="col-md-3 text-right p-0">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#manterCliente" data-whatever="Novo cliente"><i class="fas fa-plus"></i> NOVO CLIENTE</button>
+            </div> 
+          </div>
+          
+          <div class="ml-5 mr-5">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Renda Familiar</th>
+                    <th scope="col">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="clientes">
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>
