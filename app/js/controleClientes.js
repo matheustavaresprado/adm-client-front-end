@@ -45,6 +45,7 @@ function salvar(){
     $('#cpfInvalido').hide()
     $('#cpfCadastrado').hide()
     $('#msgSucesso').hide()
+    $('#msgExclusao').hide()
 
     if(verificaCPF($('#cpf').val())){
         if($('#id').val()){
@@ -81,7 +82,7 @@ function salvar(){
 function excluir(id){
     excluirCliente(id).then((dados) => {
         carregarClientes()
-        alert(dados.message)
+        $('#msgExclusao').show()
     })
 }
 
@@ -188,6 +189,7 @@ function mostrarControleClientes(){
     $('#ControleClientes').show()
     $('[data-tooltip="tooltip"]').tooltip()
     $('#msgSucesso').hide()
+    $('#msgExclusao').hide()
 }
 
 function carregarConfigsModal(){
