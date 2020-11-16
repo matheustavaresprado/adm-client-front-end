@@ -4,6 +4,7 @@ $(document).ready(function(){
     carregarClientes()
     carregarConfigsModal()
     carregarBuscaTabela()
+    $('#mes').focus()
 })
 
 function carregarClientes(){
