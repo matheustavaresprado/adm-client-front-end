@@ -41,24 +41,40 @@ function gerarHtml(item){
 }
 
 function salvar(){
-    if($('#id').val()){
-        editarCliente($('#formCliente').serialize()).then((dados) => {
-            alert(dados.message)
-            if(dados.code == 'ok')
-                $('#manterCliente').modal('toggle');
-            
-            carregarClientes()
-        })
+    $('#cpfInvalido').hide()
+    $('#cpfCadastrado').hide()
+    $('#msgSucesso').hide()
+
+    if(verificaCPF($('#cpf').val())){
+        if($('#id').val()){
+            editarCliente($('#formCliente').serialize()).then((dados) => {
+                if(dados.code == 'ok'){
+                    $('#manterCliente').modal('toggle')
+                    $('#msgSucesso').show()
+                }
+                else
+                    $('#cpfCadastrado').show()
+                
+                carregarClientes()
+            })
+        }
+        else{
+            cadastrarCliente($('#formCliente').serialize()).then((dados) => {
+                if(dados.code == 'ok'){
+                    $('#manterCliente').modal('toggle')
+                    $('#msgSucesso').show()
+                }
+                else
+                    $('#cpfCadastrado').show()
+
+                carregarClientes()
+            })
+        }
     }
     else{
-        cadastrarCliente($('#formCliente').serialize()).then((dados) => {
-            alert(dados.message)
-            if(dados.code == 'ok')
-                $('#manterCliente').modal('toggle');
-                
-            carregarClientes()
-        })
+        $('#cpfInvalido').show()
     }
+    
 }
 
 function excluir(id){
@@ -73,14 +89,12 @@ function calcularDadosDashboard(periodo){
     var dtAtual = new Date() //verificar a diferenca do utc
     var listaCalcularDados;
 
-    //dados.dt_nascimento.slice(0, 10)
-
     if(periodo == 'm')//mes
         listaCalcularDados = listaDeClientes.filter(item => new Date(item.dt_cadastro.slice(0, 10)).getMonth() == dtAtual.getMonth())
     else if(periodo == 's')//semana
-        listaCalcularDados = listaDeClientes.filter(item => getWeek(new Date(item.dt_cadastro).slice(0, 10)) == getWeek(dtAtual))
+        listaCalcularDados = listaDeClientes.filter(item => getWeek(new Date(item.dt_cadastro.slice(0, 10))) == getWeek(dtAtual) && new Date(item.dt_cadastro.slice(0, 10)).getFullYear() == dtAtual.getFullYear())
     else if (periodo == 'd')//dia
-        listaCalcularDados = listaDeClientes.filter(item => getDay(new Date(item.dt_cadastro).slice(0, 10)) == getDay(dtAtual))
+        listaCalcularDados = listaDeClientes.filter(item => getDay(new Date(item.dt_cadastro.slice(0, 10))) == dtAtual.getDate() && new Date(item.dt_cadastro.slice(0, 10)).getMonth() == dtAtual.getMonth() && new Date(item.dt_cadastro.slice(0, 10)).getFullYear() == dtAtual.getFullYear())
     else
         listaCalcularDados = listaDeClientes
     
@@ -97,7 +111,7 @@ function calcularDadosDashboard(periodo){
         else if(item.renda_familiar <= 2500) classeB++
         else if(item.renda_familiar > 2500) classeC++
 
-        if(item.renda_familiar > rendaMedia) numMedio++
+        if(item.renda_familiar > rendaMedia && maior18(new Date(item.dt_nascimento.slice(0, 10)), dtAtual)) numMedio++
     });
 
 
@@ -107,12 +121,17 @@ function calcularDadosDashboard(periodo){
     $('#numMedio').html(numMedio)
 }
 
-function getDay(date){
-    return 10
+function getDay(d){
+    d.setDate(d.getDate() + 1)
+    return d.getDate()
 }
 
-function getWeek(date){
-    return 10
+function getWeek(d){
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setDate(d.getDate() + 1)
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return weekNo;
 }
 
 function calculoRendaMedia(lista){
@@ -122,6 +141,11 @@ function calculoRendaMedia(lista){
         sum+= parseFloat(item.renda_familiar)
     });
     return sum/lista.length
+}
+
+function maior18(date1, date2){
+    let yearsDiff =  date2.getFullYear() - date1.getFullYear();
+    return yearsDiff >= 18;
 }
 
 
@@ -136,12 +160,14 @@ function preencheCamposModal(dados){
     $('#nome').val(dados.nome)
     $('#cpf').val(dados.cpf)
     $('#dt_nascimento').val(dados.dt_nascimento.slice(0, 10))
-    console.log('date', new Date(Date.parse(dados.dt_nascimento.slice(0, 10))).format('W'))
     $('#dt_cadastro').val(dados.dt_cadastro.slice(0, 10))
     $('#renda_familiar').val(dados.renda_familiar)
 }
 
 function limparCamposModal(){
+    $('#cpfInvalido').hide()
+    $('#cpfCadastrado').hide()
+
     $('#id').val('')
     $('#nome').val('')
     $('#cpf').val('')
@@ -153,12 +179,14 @@ function limparCamposModal(){
 function mostrarDashboard(){
     $('#paginaInicial').show()
     $('#ControleClientes').hide()
+    $('#mes').focus()
 }
 
 function mostrarControleClientes(){
     $('#paginaInicial').hide()
     $('#ControleClientes').show()
     $('[data-tooltip="tooltip"]').tooltip()
+    $('#msgSucesso').hide()
 }
 
 function carregarConfigsModal(){
@@ -188,4 +216,19 @@ function carregarBuscaTabela(){
     });
 }
 
+function verificaCPF(cpf) {
 
+    cpf = cpf.replace(/\D/g, '');
+    if(cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+    var result = true;
+    [9,10].forEach(function(j){
+        var soma = 0, r;
+        cpf.split(/(?=)/).splice(0,j).forEach(function(e, i){
+            soma += parseInt(e) * ((j+2)-(i+1));
+        });
+        r = soma % 11;
+        r = (r <2)?0:11-r;
+        if(r != cpf.substring(j, j+1)) result = false;
+    });
+    return result;
+}

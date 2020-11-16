@@ -21,11 +21,14 @@
 
 
     <!-- Pagina com o dashboard-->
-    <div id="paginaInicial" style="display: none">
+    <div id="paginaInicial">
       <div class="d-sm-flex align-items-center justify-content-between mt-2 mb-2 ml-5 mr-5">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <div class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-          
+        <h1 class="h3 mb-0 text-gray-800">Painel de controle</h1>
+        <div class="d-none d-sm-inline-block  shadow-sm">
+          <button type="button" class="btn btn-outline-dark" onclick="calcularDadosDashboard('')">Geral</button>
+          <button type="button" class="btn btn-outline-dark" onclick="calcularDadosDashboard('m')" id="mes">Mês</button>
+          <button type="button" class="btn btn-outline-dark" onclick="calcularDadosDashboard('s')">Semana</button>
+          <button type="button" class="btn btn-outline-dark" onclick="calcularDadosDashboard('d')">Dia</button>
         </div>
       </div>
 
@@ -109,7 +112,7 @@
     </div>
 
     <!-- Pagina com o controle de usuário-->
-    <div id="ControleClientes">
+    <div id="ControleClientes" style="display: none">
       <div id="page-wrapper">
         <div class="container-fluid">
           <div class="row bg-title mt-2 mb-2 ml-5 mr-5">
@@ -117,6 +120,11 @@
               <h4 class="page-title">CONTROLE DE CLIENTES</h4>
             </div>
           </div>
+          <!-- alerts-->
+          <div class="alert alert-success ml-5 mr-5" id="msgSucesso" style="display: none">
+            Ação efetuada com sucesso!
+          </div>
+          <!-- fim alerts-->
 
           <div class="row ml-5 mr-5 mb-2">
             <div class="col-md-9 p-0">
@@ -159,7 +167,13 @@
           </div>
 
           <div class="modal-body">
-            <form id="formCliente">
+            <div class="alert alert-danger" id="cpfInvalido" style="display: none">
+              CPF inválido.
+            </div>
+            <div class="alert alert-danger" id="cpfCadastrado" style="display: none">
+              CPF já cadastrado.
+            </div>
+            <form id="formCliente" onsubmit="salvar();return false;">
 
               <input type="hidden" class="form-control" id="id" name="id">
               <div class="form-group">
@@ -185,7 +199,7 @@
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="salvar()">Salvar</button>
+                <button type="submit" class="btn btn-primary" >Salvar</button>
               </div>
 
             </form>
