@@ -18,3 +18,19 @@
     padding: 3px;
     border-radius: 12%;
 }
+
+.border-left-primary {
+    border-left: .25rem solid #4e73df!important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid rgb(158, 237, 158) !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid rgb(228, 228, 108) !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid rgb(242, 142, 142) !important;
+}

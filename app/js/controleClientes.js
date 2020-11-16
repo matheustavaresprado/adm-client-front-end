@@ -1,3 +1,5 @@
+var listaDeClientes;
+
 $(document).ready(function(){
     carregarClientes()
     carregarConfigsModal()
@@ -7,6 +9,8 @@ $(document).ready(function(){
 function carregarClientes(){
     listarClientes().then((dados) => {
         preencheTbody(dados)
+        listaDeClientes = dados
+        calcularDadosDashboard('m')
     })
 }
 
@@ -39,7 +43,6 @@ function gerarHtml(item){
 function salvar(){
     if($('#id').val()){
         editarCliente($('#formCliente').serialize()).then((dados) => {
-            console.log('dd',dados)
             alert(dados.message)
             if(dados.code == 'ok')
                 $('#manterCliente').modal('toggle');
@@ -59,9 +62,68 @@ function salvar(){
 }
 
 function excluir(id){
-    excluirCliente(id)
-    carregarClientes()
+    excluirCliente(id).then((dados) => {
+        carregarClientes()
+        alert(dados.message)
+    })
 }
+
+function calcularDadosDashboard(periodo){
+    
+    var dtAtual = new Date() //verificar a diferenca do utc
+    var listaCalcularDados;
+
+    //dados.dt_nascimento.slice(0, 10)
+
+    if(periodo == 'm')//mes
+        listaCalcularDados = listaDeClientes.filter(item => new Date(item.dt_cadastro.slice(0, 10)).getMonth() == dtAtual.getMonth())
+    else if(periodo == 's')//semana
+        listaCalcularDados = listaDeClientes.filter(item => getWeek(new Date(item.dt_cadastro).slice(0, 10)) == getWeek(dtAtual))
+    else if (periodo == 'd')//dia
+        listaCalcularDados = listaDeClientes.filter(item => getDay(new Date(item.dt_cadastro).slice(0, 10)) == getDay(dtAtual))
+    else
+        listaCalcularDados = listaDeClientes
+    
+
+    var classeA = 0;
+    var classeB = 0;
+    var classeC = 0;
+    var numMedio = 0;
+
+    var rendaMedia = calculoRendaMedia(listaDeClientes)
+
+    $.each(listaCalcularDados, function (key, item) {
+        if(item.renda_familiar <= 980) classeA++
+        else if(item.renda_familiar <= 2500) classeB++
+        else if(item.renda_familiar > 2500) classeC++
+
+        if(item.renda_familiar > rendaMedia) numMedio++
+    });
+
+
+    $('#numClientesA').html(classeA)
+    $('#numClientesB').html(classeB)
+    $('#numClientesC').html(classeC)
+    $('#numMedio').html(numMedio)
+}
+
+function getDay(date){
+    return 10
+}
+
+function getWeek(date){
+    return 10
+}
+
+function calculoRendaMedia(lista){
+    var sum = 0.0
+
+    $.each(lista, function (key, item) {
+        sum+= parseFloat(item.renda_familiar)
+    });
+    return sum/lista.length
+}
+
 
 function abrirModalCliente(id){
     obterClientePorId(id).then((dados) => {
@@ -74,6 +136,7 @@ function preencheCamposModal(dados){
     $('#nome').val(dados.nome)
     $('#cpf').val(dados.cpf)
     $('#dt_nascimento').val(dados.dt_nascimento.slice(0, 10))
+    console.log('date', new Date(Date.parse(dados.dt_nascimento.slice(0, 10))).format('W'))
     $('#dt_cadastro').val(dados.dt_cadastro.slice(0, 10))
     $('#renda_familiar').val(dados.renda_familiar)
 }
@@ -86,7 +149,6 @@ function limparCamposModal(){
     $('#dt_cadastro').val('')
     $('#renda_familiar').val('')
 }
-
 
 function mostrarDashboard(){
     $('#paginaInicial').show()

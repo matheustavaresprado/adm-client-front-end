@@ -19,12 +19,97 @@
         </nav>
     </div>
 
+
+    <!-- Pagina com o dashboard-->
     <div id="paginaInicial" style="display: none">
-        <p>Aqui terá um dashboard</p>
+      <div class="d-sm-flex align-items-center justify-content-between mt-2 mb-2 ml-5 mr-5">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <div class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+          
+        </div>
+      </div>
+
+      <div class="row ml-5 mr-5">
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Renda acima da média (>18 anos)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><span id="numMedio"></span></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- classe A -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase">
+                                Classe A</div>
+                              <div class="blockquote-footer mb-1"><small>Número de clientes</small></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><span id="numClientesA"></span></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-coins fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- classe B -->
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+              <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-warning text-uppercase">
+                              Classe B</div>
+                          <div class="blockquote-footer mb-1"><small>Número de clientes</small></div>
+                          <div class="h5 mb-0 font-weight-bold text-gray-800"><span id="numClientesB"></span></div>
+                      </div>
+                      <div class="col-auto">
+                          <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- classe C -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase">
+                            Classe C</div>
+                        <div class="blockquote-footer mb-1"><small>Número de clientes</small></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><span id="numClientesC"></span></div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="ControleClientes" >
+      </div>
+    </div>
 
+    <!-- Pagina com o controle de usuário-->
+    <div id="ControleClientes">
       <div id="page-wrapper">
         <div class="container-fluid">
           <div class="row bg-title mt-2 mb-2 ml-5 mr-5">

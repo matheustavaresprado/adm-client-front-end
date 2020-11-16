@@ -19,12 +19,10 @@ async function editarCliente(cliente){
     });
 }
 
-function excluirCliente(id){
-    $.ajax({
+async function excluirCliente(id){
+    return await $.ajax({
         url: 'http://localhost:4000/excluirCliente/' + id,
         type: 'DELETE',
-        success: function(data) {
-            console.log(data)
-        }
+        success: function(data) {}
     });
 }
